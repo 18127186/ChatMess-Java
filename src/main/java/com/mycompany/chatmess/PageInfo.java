@@ -4,13 +4,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 public class PageInfo {
-    public static String connectId;
-    public static String DB_URL = "jdbc:mysql://localhost:3309/appjava";
-    public static String USER_NAME ="root";
-    public static String PASS_WORD = "Trandinhphuoc2k";
+    public static String connectId,username;
+    public static String DB_URL = "jdbc:mysql://db4free.net:3306/appchatjava";
+    public static String USER_NAME ="appchatjava";
+    public static String PASS_WORD = "appchatjava";
     private JTextField displayname, gender, dob, personalMessage, country ,membersince ;
     private JLabel displaynameJLabel,genderJLabel,dobJLabel,personalMessageJLabel,countryJLabel,membersinceJLabel;
     public JFrame frame1;
@@ -35,8 +37,7 @@ public class PageInfo {
         c.gridy = gridy;
         c.insets = new Insets(5,5,5,5); 
         c.ipady = ipady; 
-        c.ipadx = ipadx;  
-        c.weighty = 0.1;
+        c.ipadx = ipadx; 
     }
     public void CreateText(){
         displayname = new JTextField();
@@ -59,6 +60,8 @@ public class PageInfo {
         pane.add(displaynameJLabel, c);
         
         CreateComponents(1, 0, 20, 500);
+        displayname.setText(username);
+        displayname.setEditable(false);
         pane.add(displayname, c);
         
         CreateComponents(0,1, 20, 5);
@@ -102,7 +105,7 @@ public class PageInfo {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (displayname.getText().isEmpty() || gender.getText().isEmpty() || dob.getText().isEmpty()
+                if (gender.getText().isEmpty() || dob.getText().isEmpty()
                         || personalMessage.getText().isEmpty() || country.getText().isEmpty())
                     JOptionPane.showMessageDialog(displayname,"Complete All The Fields");
                 else{
@@ -128,6 +131,8 @@ public class PageInfo {
                                     + "='"+connectId+"';";
                             stm.executeUpdate(queryString);
                         }
+                        String query2 = "UPDATE friend SET login=1 where ID='" + connectId + "';";
+                        stm.executeUpdate(query2);
                         OnlineBuddy ob = new OnlineBuddy(connectId,displayname.getText());
                         ob.createAndShowGUI();
                         conn.close();
@@ -145,8 +150,13 @@ public class PageInfo {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               OnlineBuddy ob = new OnlineBuddy(connectId,displayname.getText());
-               ob.createAndShowGUI();
+               OnlineBuddy ob;
+                try {
+                    ob = new OnlineBuddy(connectId,displayname.getText());     
+                    ob.createAndShowGUI();
+                } catch (Exception ex) {
+                    Logger.getLogger(PageInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });    
     }
@@ -167,6 +177,7 @@ public class PageInfo {
         pane.add(displaynameJLabel, c);
         
         CreateComponents(1, 0, 20, 5);
+        displayname.setEditable(false);
         pane.add(displayname, c);
         
         CreateComponents(0,1, 20, 200);
@@ -174,7 +185,7 @@ public class PageInfo {
         pane.add(genderJLabel, c);
         
         CreateComponents(1, 1, 20, 5);
-        gender.setText("");
+        gender.setEditable(false);
         pane.add(gender, c);
         
         CreateComponents(0, 2, 20, 80);
@@ -182,7 +193,7 @@ public class PageInfo {
         pane.add(dobJLabel, c);
         
         CreateComponents(1, 2, 20, 5);
-        dob.setText("");
+        dob.setEditable(false);
         pane.add(dob, c);
         
         CreateComponents(0, 3, 20, 80);
@@ -190,7 +201,8 @@ public class PageInfo {
         pane.add(personalMessageJLabel, c);
         
         CreateComponents(1, 3, 20, 5);
-        personalMessage.setText("");
+        
+        personalMessage.setEditable(false);
         pane.add(personalMessage, c);
         
         CreateComponents(0, 4, 20, 80);
@@ -198,7 +210,7 @@ public class PageInfo {
         pane.add(countryJLabel, c);
         
         CreateComponents(1, 4, 20, 5);
-        country.setText("");
+        country.setEditable(false);
         pane.add(country, c);
 
         CreateComponents(0, 5, 20, 80);
@@ -206,7 +218,7 @@ public class PageInfo {
         pane.add(membersinceJLabel, c);
         
         CreateComponents(1, 5, 20, 5);
-        membersince.setText("");
+        membersince.setEditable(false);
         pane.add(membersince, c);               
         button = new JButton("Exit");
         CreateComponents(1, 8, 20, 80);
@@ -214,8 +226,11 @@ public class PageInfo {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GUI gui = new GUI();
-                gui.createAndShowGUI();
+                try {
+                    OnlineBuddy ob = new OnlineBuddy();
+                } catch (Exception ex) {
+                    Logger.getLogger(PageInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
@@ -244,7 +259,7 @@ public class PageInfo {
                     String querySearchAccount = "SELECT * FROM users , info WHERE users.ID = info.ID and users.ID='"+connectId + "';";
                     ResultSet rs = stm.executeQuery(querySearchAccount);
                     if (rs.next()){
-                        displayname.setText(rs.getString("displayName"));
+                        username = rs.getString("userName");
                         gender.setText(rs.getString("Gender"));
                         dob.setText(rs.getString("DoB"));
                         personalMessage.setText(rs.getString("personalMessage"));
@@ -252,7 +267,11 @@ public class PageInfo {
                         membersince.setText(rs.getString("memberSince"));
                     }
                     else{
-                        displayname.setText("");
+                        String query = "SELECT userName FROM users WHERE ID = "+connectId + ";";
+                        ResultSet rs1 = stm.executeQuery(query);
+                        rs1.next();
+                        username = rs1.getString("userName");
+                        displayname.setText(username);
                         gender.setText("");
                         dob.setText("");
                         personalMessage.setText("");

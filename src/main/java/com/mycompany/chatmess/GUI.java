@@ -1,3 +1,5 @@
+
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -12,18 +14,17 @@ package com.mycompany.chatmess;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
-import java.util.HashMap;
 import javax.swing.*;
 public class GUI {
     public static String connectID;
     final static boolean shouldFill = true;
     final static boolean RIGHT_TO_LEFT = false;
+    public static String ipofServer;
     public static JFrame frame1 = new JFrame("Chat Mess");
     public GridBagConstraints c = new GridBagConstraints();
     public   JButton button;
-    public  JTextField NameApp,userName,passWord;
-    public JLabel userNameNotifi,passWordNotifi;
+    public  JTextField NameApp,userName,passWord,ipserver;
+    public JLabel userNameNotifi,passWordNotifi,IPNotifi;
     public JTextField notification;
     public void FirstOfAddComponents(Container pane){
         if (RIGHT_TO_LEFT) 
@@ -42,6 +43,8 @@ public class GUI {
         passWord = new JPasswordField("",15);
         userNameNotifi = new JLabel();
         passWordNotifi = new JLabel();
+        ipserver = new JTextField(); // nhap ip server de ket noi
+        IPNotifi = new JLabel("Ip Server");
     }
     //create on GridBagConstraints c
     public void CreateComponents(int gridx,int gridy, int ipady,int ipadx){
@@ -49,8 +52,7 @@ public class GUI {
         c.gridy = gridy;
         c.insets = new Insets(5,5,5,5); 
         c.ipady = ipady; 
-        c.ipadx = ipadx;  
-        c.weighty = 0.1;
+        c.ipadx = ipadx; 
     }
     public void addComponentsToPane(Container pane) {
         FirstOfAddComponents(pane);
@@ -90,6 +92,7 @@ public class GUI {
                     JOptionPane.showMessageDialog(passWord, "Enter the PassWord");
                 }
                 else{
+                    ipofServer = ipserver.getText().trim();
                     ConnectionDB connection = new ConnectionDB(userName.getText(),passWord.getText());
                 }
             }
@@ -118,9 +121,14 @@ public class GUI {
         button.setActionCommand("Exit"); 
         
         //button.addActionListener(this);
-
-       
         
+        CreateComponents(0,9, 20, 80);
+        pane.add(IPNotifi,c);
+        
+        CreateComponents(1,9, 20, 80);
+        pane.add(ipserver,c);
+        
+            
     }
     public void createAndShowGUI() {
         frame1.getContentPane().removeAll();

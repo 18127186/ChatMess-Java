@@ -18,9 +18,9 @@ public class ConnectionDB extends JFrame {
    
     public static Connection conn;
     public static JTextField noti;
-    public static String DB_URL = "jdbc:mysql://localhost:3309/appjava";
-    public static String USER_NAME ="root";
-    public static String PASS_WORD = "Trandinhphuoc2k";
+    public static String DB_URL = "jdbc:mysql://db4free.net:3306/appchatjava";
+    public static String USER_NAME ="appchatjava";
+    public static String PASS_WORD = "appchatjava";
 
     public ConnectionDB(String userName, String passWord){
         Connection conn = getConnection(DB_URL, USER_NAME, PASS_WORD,userName,passWord);
@@ -49,7 +49,7 @@ public class ConnectionDB extends JFrame {
                         OnlineBuddy ob = new OnlineBuddy(connectID,userDisplayName);
                         if (info == 1) {
                             try {
-                                String query2 = "UPDATE buddy SET login=1,usertime=now() where ID='" + userid + "';";
+                                String query2 = "UPDATE friend SET login=1 where ID='" + userid + "';";
                                 stm.executeUpdate(query2);
                                 ob.createAndShowGUI();
                             } catch (Exception e) {
@@ -58,6 +58,7 @@ public class ConnectionDB extends JFrame {
                         } else {
                             PageInfo pi = new PageInfo(connectID);
                             pi.createAndShowGUIEdit();
+                            
                         }
                     } else {
                         JOptionPane.showMessageDialog(noti, "Invalid Username Or Password");

@@ -15,9 +15,9 @@ import javax.swing.*;
  * @author trand
  */
 public class Register {
-    public static String DB_URL = "jdbc:mysql://localhost:3309/appjava";
-    public static String USER_NAME ="root";
-    public static String PASS_WORD = "Trandinhphuoc2k";
+    public static String DB_URL = "jdbc:mysql://db4free.net:3306/appchatjava";
+    public static String USER_NAME ="appchatjava";
+    public static String PASS_WORD = "appchatjava";
     private JTextField name,userName,passWord,confirmPassword,email;
     private JLabel nameJLabel,userNameJLabel,passWordJLabel,confirmPassWordJLabel,emailJLabel;
     public JFrame frame1;
@@ -42,8 +42,7 @@ public class Register {
         c.gridy = gridy;
         c.insets = new Insets(5,5,5,5); 
         c.ipady = ipady; 
-        c.ipadx = ipadx;  
-        c.weighty = 0.1;
+        c.ipadx = ipadx; 
     }
     public void CreateText(){
         name = new JTextField();
@@ -58,14 +57,7 @@ public class Register {
         emailJLabel = new JLabel();
     }
     public void addComponentsToPane(Container pane) {
-        FirstOfAddComponents(pane);
-        CreateComponents(0, 0, 20, 200);
-        nameJLabel.setText("Name");
-        pane.add(nameJLabel, c);
-        
-        CreateComponents(1, 0, 20, 5);
-        pane.add(name, c);
-        
+        FirstOfAddComponents(pane);       
         CreateComponents(0,1, 20, 200);
         userNameJLabel.setText("UserName");
         pane.add(userNameJLabel, c);
@@ -108,8 +100,6 @@ public class Register {
                     JOptionPane.showMessageDialog(userName, "Enter the Username");
                 } else if(passWord.getText().isEmpty()){
                     JOptionPane.showMessageDialog(passWord, "Enter the PassWord");
-                } else if(name.getText().isEmpty()){
-                    JOptionPane.showMessageDialog(name, "Enter the Name");
                 } else if(confirmPassword.getText().isEmpty()){
                     JOptionPane.showMessageDialog(confirmPassword, "Enter the Confirm PassWord");
                 } else if(email.getText().isEmpty()){
@@ -129,15 +119,15 @@ public class Register {
                             JOptionPane.showMessageDialog(userName, "Account already exists");
                         }
                         else{
-                            String  queryAddAccount ="INSERT INTO users VALUES (0,'"+userName.getText()+"',md5('"+passWord.getText()+"'),123,'"+email.getText()+"','"+name.getText()+"','123',1,0);";
+                            String  queryAddAccount ="INSERT INTO users VALUES (0,'"+userName.getText()+"',md5('"+passWord.getText()+"'),123,'"+email.getText()+"',1,0);";
                             stm.executeUpdate(queryAddAccount);
                             String query="SELECT ID  FROM users  where  username= '"+userName.getText()+"';";
                             ResultSet rsSelect=stm.executeQuery(query);
 
                             if (rsSelect.next()){ 
                                 int id = rsSelect.getInt("ID");      
-                                String queryBuddy="INSERT INTO buddy VALUES( 0,'"+id+"','"+userName.getText()+"',curtime(),0,0);";
-                                stm.executeUpdate(queryBuddy);    
+                                String queryFriend="INSERT INTO friend VALUES( 0,'"+id+"');";
+                                stm.executeUpdate(queryFriend);    
                             }
                             JOptionPane.showMessageDialog(name,"Registration Completed");
                             GUI gui = new GUI();
