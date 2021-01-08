@@ -7,18 +7,16 @@ package com.mycompany.chatmess;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Random;
 /**
  *
  * @author trand
  */
 public class ClientServer {
     private String username = "";
-    private ServerSocket serverPeer;   
+    private ServerSocket serverClient;   
     private int port;
     public String ip;
     public static String ipofServer = GUI.ipofServer;
@@ -27,14 +25,14 @@ public class ClientServer {
     public ClientServer(String name) throws Exception {
 		username = name;
 		port = Client.getPort();
-		serverPeer = new ServerSocket(port);
+		serverClient = new ServerSocket(port);
                 Thread thread = new Thread(new WaitPeerConnect());
 		thread.start();
 	}
 	
     public void exit() throws IOException {
 		isStop = true;
-		serverPeer.close();
+		serverClient.close();
 	}
 
     class WaitPeerConnect implements Runnable {
@@ -46,7 +44,7 @@ public class ClientServer {
 		public void run() {
 			while (!isStop) {
 				try {
-					connection = serverPeer.accept();
+					connection = serverClient.accept();
 					getRequest = new ObjectInputStream(connection.getInputStream());
 					String msg = (String) getRequest.readObject();
 					String name = MessageTags.Decode.getNameRequestChat(msg);
@@ -82,7 +80,7 @@ public class ClientServer {
 				}
 			}
 			try {
-				serverPeer.close();
+				serverClient.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

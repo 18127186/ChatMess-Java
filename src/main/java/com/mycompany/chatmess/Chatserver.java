@@ -22,9 +22,9 @@ public class Chatserver {
     public static  JButton button;
     final static boolean shouldFill = true;
     public static GridBagConstraints c = new GridBagConstraints();			
-    private static ObjectOutputStream obOutputClient;		
-    private static ObjectInputStream obInputStream;			
-    public static boolean isStop = false, isExit = false;		
+    private static ObjectOutputStream oos;		
+    private static ObjectInputStream ois;			
+    public static boolean Stop = false, Exit = false;		
     public static ServerSocket serverSocket;
     public static Socket socket;
     public static JTextArea textfornoti;
@@ -84,7 +84,7 @@ public class Chatserver {
         pane.add(scrollPane,c);
     }
     public static void stop() throws IOException{
-        isStop = true;
+        Stop = true;
 	serverSocket.close();							
 	socket.close();
         System.out.print("Server Stop");
@@ -160,8 +160,8 @@ public class Chatserver {
     }
     private static boolean waitConnect() throws Exception {
         socket = serverSocket.accept();
-        obInputStream = new ObjectInputStream(socket.getInputStream());
-        String msg = (String) obInputStream.readObject();
+        ois = new ObjectInputStream(socket.getInputStream());
+        String msg = (String) ois.readObject();
         ArrayList<String> getData = MessageTags.Decode.getUser(msg);
         if (getData != null) {
             if (!Exit(getData.get(0))) {						
@@ -175,15 +175,15 @@ public class Chatserver {
         public void run(){
             super.run();
             try {
-                while (!isStop) {                    
+                while (!Stop) {                    
                     if(waitConnect()){
-                        if (isExit) {   
-                            isExit = false;
+                        if (Exit) {   
+                            Exit = false;
 			} else {
-                            obOutputClient = new ObjectOutputStream(socket.getOutputStream());
-                            obOutputClient.writeObject(sendSessionAccept());
-                            obOutputClient.flush();
-                            obOutputClient.close();
+                            oos = new ObjectOutputStream(socket.getOutputStream());
+                            oos.writeObject(sendSessionAccept());
+                            oos.flush();
+                            oos.close();
 			}
                     }
                 }

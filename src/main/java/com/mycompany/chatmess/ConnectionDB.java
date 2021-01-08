@@ -42,7 +42,7 @@ public class ConnectionDB extends JFrame {
                     connectID =String.valueOf(userid);
                     if (pass.equals(curpass) && (verify == 1)) {
                         JOptionPane.showMessageDialog(noti, "Login success");
-                        String queryToSearchName = "SELECT displayName FROM info WHERE ID ='" + userid + "';";
+                        String queryToSearchName = "SELECT userName as displayName FROM users WHERE ID ='" + userid + "';";
                         ResultSet rs = stm.executeQuery(queryToSearchName);
                         String userDisplayName = "";
                         if(rs.next()) userDisplayName = rs.getString("displayName");

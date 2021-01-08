@@ -30,10 +30,9 @@ public class Client {
     private String nameUser = "";
     private boolean isStop = false;
     private static int portClient = 10000; 
-    private int timeOut = 1000;  //time to each request is 10 seconds.
     private Socket socketClient;
-    private ObjectInputStream serverInputStream;
-    private ObjectOutputStream serverOutputStream;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
     Client(String ip, int portClient, String user, String msg) throws Exception{
         IPserver = InetAddress.getByName(ip);
 	nameUser = user;
@@ -48,12 +47,12 @@ public class Client {
 		SocketAddress addressServer = new InetSocketAddress(IPserver, portServer);
 		socketClient.connect(addressServer);
 		String msg = MessageTags.Encode.sendRequest(nameUser);
-		serverOutputStream = new ObjectOutputStream(socketClient.getOutputStream());
-		serverOutputStream.writeObject(msg);
-		serverOutputStream.flush();
-		serverInputStream = new ObjectInputStream(socketClient.getInputStream());
-		msg = (String) serverInputStream.readObject();
-		serverInputStream.close();
+		oos = new ObjectOutputStream(socketClient.getOutputStream());
+		oos.writeObject(msg);
+		oos.flush();
+		ois = new ObjectInputStream(socketClient.getInputStream());
+		msg = (String) ois.readObject();
+		ois.close();
 		clientarray = MessageTags.Decode.getAllUser(msg);
 		new Thread().start();
 	}
@@ -63,7 +62,7 @@ public class Client {
 			super.run();
 			while (!isStop) {
 				try {
-					Thread.sleep(timeOut);
+					Thread.sleep(100);
 					request();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -80,10 +79,10 @@ public class Client {
 	SocketAddress addressServer = new InetSocketAddress(IPserver, portServer);
 	socketClient.connect(addressServer);
 	String msg = MessageTags.Encode.exit(nameUser);
-	serverOutputStream = new ObjectOutputStream(socketClient.getOutputStream());
-	serverOutputStream.writeObject(msg);
-	serverOutputStream.flush();
-	serverOutputStream.close();
+	oos = new ObjectOutputStream(socketClient.getOutputStream());
+	oos.writeObject(msg);
+	oos.flush();
+	oos.close();
 	server.exit();
     }
 

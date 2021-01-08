@@ -90,6 +90,8 @@ public class GUI {
                     JOptionPane.showMessageDialog(userName, "Enter the Username");
                 } else if(passWord.getText().isEmpty()){
                     JOptionPane.showMessageDialog(passWord, "Enter the PassWord");
+                } else if(ipserver.getText().isEmpty()){
+                    JOptionPane.showMessageDialog(ipserver, "Enter the Ip server");
                 }
                 else{
                     ipofServer = ipserver.getText().trim();
@@ -109,11 +111,6 @@ public class GUI {
                     rg.createAndShowGUI();
             }
         });
-        
-        button = new JButton("Forgot password");
-        CreateComponents(1, 7, 20, 80);
-        pane.add(button, c);
-        button.setActionCommand("Forgot password");  
         
         button = new JButton("Exit");
         CreateComponents(1, 8, 20, 80);

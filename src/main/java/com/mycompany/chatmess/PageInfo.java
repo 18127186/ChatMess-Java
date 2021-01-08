@@ -55,15 +55,6 @@ public class PageInfo {
     }
     public void addComponentsToPaneEdit(Container pane) {
         FirstOfAddComponents(pane);
-        CreateComponents(0, 0, 20, 5);
-        displaynameJLabel.setText("Display Name");
-        pane.add(displaynameJLabel, c);
-        
-        CreateComponents(1, 0, 20, 500);
-        displayname.setText(username);
-        displayname.setEditable(false);
-        pane.add(displayname, c);
-        
         CreateComponents(0,1, 20, 5);
         genderJLabel.setText("Gender");
         pane.add(genderJLabel, c);
@@ -133,7 +124,7 @@ public class PageInfo {
                         }
                         String query2 = "UPDATE friend SET login=1 where ID='" + connectId + "';";
                         stm.executeUpdate(query2);
-                        OnlineBuddy ob = new OnlineBuddy(connectId,displayname.getText());
+                        OnlineBuddy ob = new OnlineBuddy(connectId,username);
                         ob.createAndShowGUI();
                         conn.close();
                     } catch (Exception ex) {
@@ -152,7 +143,7 @@ public class PageInfo {
             public void actionPerformed(ActionEvent e) {
                OnlineBuddy ob;
                 try {
-                    ob = new OnlineBuddy(connectId,displayname.getText());     
+                    ob = new OnlineBuddy(connectId,username);     
                     ob.createAndShowGUI();
                 } catch (Exception ex) {
                     Logger.getLogger(PageInfo.class.getName()).log(Level.SEVERE, null, ex);
@@ -172,14 +163,6 @@ public class PageInfo {
     }
     public void addComponentsToPaneView(Container pane) {
         FirstOfAddComponents(pane);
-        CreateComponents(0, 0, 20, 200);
-        displaynameJLabel.setText("Display Name");
-        pane.add(displaynameJLabel, c);
-        
-        CreateComponents(1, 0, 20, 5);
-        displayname.setEditable(false);
-        pane.add(displayname, c);
-        
         CreateComponents(0,1, 20, 200);
         genderJLabel.setText("Gender");
         pane.add(genderJLabel, c);

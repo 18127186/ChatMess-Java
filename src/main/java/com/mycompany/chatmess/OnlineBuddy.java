@@ -53,15 +53,8 @@ public class OnlineBuddy {
     final static boolean RIGHT_TO_LEFT = false;
     public GridBagConstraints c = new GridBagConstraints();
     public void FirstOfAddComponents(Container pane){
-        if (RIGHT_TO_LEFT)
-            {
-                pane.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
-            }
         pane.setLayout(new GridBagLayout());
-        if (shouldFill)
-            {
-                c.fill = GridBagConstraints.HORIZONTAL;
-            }
+        c.fill = GridBagConstraints.HORIZONTAL;
     }
     //create on GridBagConstraints c
     public void CreateComponents(int gridx,int gridy, int ipady,int ipadx){
